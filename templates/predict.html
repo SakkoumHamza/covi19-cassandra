@@ -1,0 +1,334 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PrédiLab - predict</title>
+    <link rel="stylesheet" href="{% static 'predict.css' %}" />
+  <link rel="shortcut icon" href="{% static 'images/glucoselogo.svg'%}" type="image/svg+xml">
+  
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+        .popup-container {
+        position: fixed;
+        top: 0;
+        display: none;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        backdrop-filter: blur(5px);
+        justify-content: center;
+        align-items: center;
+        z-index: 999; /* Ensure popup is on top */
+    }
+    
+    /* Positive result gradient */
+.negative {
+  background: linear-gradient(45deg, #138313, #145014);
+}
+/* Negative result gradient */
+.positive {
+    background: linear-gradient(45deg, #ff0000, #990000);
+}
+.visible{
+display: block;
+}
+.contact-form:before {
+    content: "";
+    position: absolute;
+    display:none
+}
+.contact-form.negative{
+border-radius: 12px;
+}
+.input-container label {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  padding: 0 0.4rem;
+  color: #fafafa;
+  font-size: 0.9rem;
+  font-weight: 400;
+  pointer-events: none;
+  z-index: 1000;
+  transition: 0.5s;
+}
+.input-container span {
+  position: absolute;
+  top: 0;
+  left: 25px;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  padding: 0 0.4rem;
+  color:transparent;
+  pointer-events: none;
+  z-index: 500;
+}
+
+.input-container span:before,
+.input-container span:after {
+  content: "";
+  position: absolute;
+  width: 10%;
+  opacity: 0;
+  transition: 0.3s;
+  height: 5px;
+  background-color: var(--midnight-green);
+  top: 50%;
+  transform: translateY(-50%);
+}
+    </style>
+  </head>
+  <body>
+  
+    <div class="container">
+      <div class="form">
+        <div class="contact-info">
+          <h3 class="title">Évaluation du risque de diabète</h3>
+
+          <img src="../static/images/onlinedr.png" alt="" width="400px" height="400px" id="bg">
+          <p>{{result2}}</p>
+        </div>
+
+        <div class="contact-form">
+          <span class="circle one"></span>
+          <span class="circle two"></span>
+
+          <form action="{% url 'result1' %}" method="GET" autocomplete="off" id="predictionForm">
+          
+            
+            <div class="input-container">
+              <input type="text" class="input"  name="n1" required/>
+              <label>Grossesses</label>
+              <span>Grossesses</span>
+            </div>
+              
+              
+            <div class="input-container">
+              <input type="text" class="input"  name="n2" required/>
+              <label>Glycémie (mg/dl)</label>
+              <span>Glycémie (mg/dl)</span>
+            </div>
+            
+            
+            <div class="input-container">
+              <input type="text" class="input" name="n3" required/>
+              <label>Pression artérielle diastolique (mmHg)</label>
+              <span>Pression artérielle diastolique (mmHg)</span>
+            </div>
+            
+            
+            <div class="input-container">
+              <input type="text" class="input" name="n4" required />
+              <label>Épaisseur du pli cutané (mm) </label>
+              <span>Épaisseur du pli cutané (mm)</span>
+            </div>
+            
+            
+            <div class="input-container">
+              <input type="text" class="input" name="n5" required/>
+              <label>Insuline (mUI/ml)</label>
+              <span>Insuline (mUI/ml)</span>
+            </div>
+            
+            
+            <div class="input-container">
+              <input type="text" class="input"  name="n6" required/>
+              <label>IMC</label>
+              <span>IMC</span>
+            </div>
+            
+            
+            <div class="input-container">
+              <input type="text" class="input"  name="n7" required/>
+              <label>Fonction Pedigree Diabète</label>
+              <span>Fonction Pedigree Diabète</span>
+            </div>
+            
+            
+            <div class="input-container">
+              <input type="text" class="input"  name="n8" required/>
+              <label>Age</label>
+              <span>Age</span>
+            </div>
+            
+
+            <input type="submit" value="Predire" class="btn" id="predict-btn" />
+            
+            
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="popup-container" id="popupcontainertest" width="100%" > 
+          
+    </div>
+    <script>
+    const inputs = document.querySelectorAll(".input");
+
+function focusFunc() {
+  let parent = this.parentNode;
+  parent.classList.add("focus");
+}
+
+function blurFunc() {
+  let parent = this.parentNode;
+  if (this.value == "") {
+    parent.classList.remove("focus");
+  }
+}
+
+inputs.forEach((input) => {
+  input.addEventListener("focus", focusFunc);
+  input.addEventListener("blur", blurFunc);
+});
+
+window.onload= ()=>{
+    result = "{{ result }}";
+    var val1="{{val1}}"
+    var val2="{{val2}}"
+    var val3="{{val3}}"
+    var val4="{{val4}}"
+    var val5="{{val5}}"
+    var val6="{{val6}}"
+    var val7="{{val7}}"
+    var val8="{{val8}}"
+    
+    
+    if (result === 'true') {
+        var success = document.getElementById('popupcontainertest');
+        console.log('result true')
+        console.log('val8 :'+val8)
+        console.log('val6:'+val6)
+           success.innerHTML = `
+          
+            <form class="contact-form positive" id='predict-form' style='position:fixed; top: 7%; left: 30%;'>
+              <h2 style="color: white; text-align: center;">votre resultat de prediction est positive.</h2>
+              <div class="input-container">
+                <input type="text" class="input"  name="n1" value="${val1}" readonly/>
+              </div>
+                
+                
+              <div class="input-container">
+                <input type="text" class="input"  name="n2" value="${val2}" readonly/>
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input" name="n3" value="${val3}" readonly/>
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input" name="n4" value="${val4}" readonly/>
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input" name="n5" value="${val5}" readonly/>
+              
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text"  class="input"  value="${val6}" readonly name="n6" />
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input"  name="n7" value="${val7}" readonly/>
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input"  value="${val8}" readonly>
+              </div>
+            </form>
+       
+        `; 
+       success.classList.add('visible')
+       
+       
+       // Close the popup when clicking outside of it
+       window.addEventListener('click', function(event) {
+              if (event.target === success) {
+                  success.classList.remove('visible');
+              }
+      });
+       
+    } else if(result==='false') {
+      var success = document.getElementById('popupcontainertest');
+        console.log('result false')
+        console.log('val8 :'+val8)
+        console.log('val6:'+val6)
+           success.innerHTML = `
+            <form class="contact-form negative" style='position:fixed; top: 7%; left: 30%;'>
+              <h2 style="color: white; text-align: center;">votre resultat de prediction est negative ! </h2>
+              <div class="input-container">
+                <input type="text" class="input"  name="n1" value="${val1}" readonly/>
+              </div>
+                
+                
+              <div class="input-container">
+                <input type="text" class="input"  name="n2" value="${val2}" readonly/>
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input" name="n3" value="${val3}" readonly/>
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input" name="n4" value="${val4}" readonly/>
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input" name="n5" value="${val5}" readonly/>
+              
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input"  value="${val6}" readonly name="n6" />
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input"  name="n7" value="${val7}" readonly/>
+                
+              </div>
+              
+              
+              <div class="input-container">
+                <input type="text" class="input"  value="${val8}" readonly>
+              </div>
+            </form>
+        `; 
+       success.classList.add('visible')
+       // Close the popup when clicking outside of it
+       window.addEventListener('click', function(event) {
+              if (event.target === success) {
+                  success.classList.remove('visible');
+              }
+            })
+  }
+  }
+  
+    </script>
+  </body>
+</html>

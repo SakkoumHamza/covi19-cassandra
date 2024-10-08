@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+      
+    ></script>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'auth.css' %}">
+    <title>Verification</title>
+    <link rel="shortcut icon" href="{% static 'images/glucoselogo.svg' %}" type="image/svg+xml">
+    <style>
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup" id="verified-section">
+            <form action="{% url 'verify_email' user.id %}" method="post" class="sign-in-form">
+              {% csrf_token %}
+              <h1 class="title">Verifier votre email</h1>
+              <div class="input-field">
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="" name="email" readonly value="{{ user.email }}" />
+              </div>
+              <div class="input-field">
+                <i class="fa-solid fa-check"></i>
+                <input type="text" placeholder="Code de verification" name="code" required id="code" />
+              </div>
+              <input type="submit" value="Verifier" class="btn solid" />
+            </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content" id="content-register">
+            <h2>Étape de verification !</h2>
+            <p>  
+              Verifier votre adresse email maintenant pour accéder a votre espace prédilab.
+            </p>
+          </div>
+          <img id="login-img" src="{% static 'images/verify-email.svg'%}" class="image" alt="" />
+        </div>
+        
+      </div>
+    </div>
+
+    <script>
+    
+        window.onload = function(){
+          var emailVerified = "{{ email_verified|yesno:'true,false' }}"
+            if (emailVerified==='true') {
+                var success = document.getElementById('verified-section')
+                success.innerHTML=`
+                {% load static %}
+                <form action="{% url 'dashboard' %}" method="post" class="sign-in-form">
+                  <h1 class="title">Email vérifié avec succès !</h1>
+                    <div class="input-field">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" placeholder="" name="email" readonly value="{{ user.email }}" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fa-solid fa-check" style="color:green"></i>
+                        <input type="text" name="c" readonly id="c" value="correcte!" style='color:green' />
+                    </div>
+                    <button type='submit' class="btn solid">accueil</button>
+                    </form>
+                `
+                                
+                }
+          }
+      const sign_in_btn = document.querySelector("#sign-in-btn");
+      const sign_up_btn = document.querySelector("#sign-up-btn");
+      const container = document.querySelector(".container");
+      
+      sign_up_btn.addEventListener("click", () => {
+        container.classList.add("sign-up-mode");
+      });
+      
+      sign_in_btn.addEventListener("click", () => {
+        container.classList.remove("sign-up-mode");
+      });
+      </script>
+  </body>
+</html>
