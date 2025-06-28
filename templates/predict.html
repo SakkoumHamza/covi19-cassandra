@@ -8,10 +8,7 @@
     <link rel="stylesheet" href="{% static 'predict.css' %}" />
   <link rel="shortcut icon" href="{% static 'images/glucoselogo.svg'%}" type="image/svg+xml">
   
-    <script
-      src="https://kit.fontawesome.com/64d58efce2.js"
-      crossorigin="anonymous"
-    ></script>
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
     <style>
         .popup-container {
         position: fixed;
@@ -90,77 +87,85 @@ border-radius: 12px;
     <div class="container">
       <div class="form">
         <div class="contact-info">
-          <h3 class="title">Évaluation du risque de diabète</h3>
-
+          <h3 class="title">Évaluation du risque de covid-19</h3>
           <img src="../static/images/onlinedr.png" alt="" width="400px" height="400px" id="bg">
-          <p>{{result2}}</p>
+          <p></p>
         </div>
 
         <div class="contact-form">
           <span class="circle one"></span>
           <span class="circle two"></span>
 
-          <form action="{% url 'result1' %}" method="GET" autocomplete="off" id="predictionForm">
+          <form action="{% url 'result' %}" method="GET" autocomplete="off" id="predictionForm">
           
-            
             <div class="input-container">
               <input type="text" class="input"  name="n1" required/>
-              <label>Grossesses</label>
-              <span>Grossesses</span>
+              <label>Medical unit</label>
+              <span>Medical unit</span>
             </div>
               
               
             <div class="input-container">
               <input type="text" class="input"  name="n2" required/>
-              <label>Glycémie (mg/dl)</label>
-              <span>Glycémie (mg/dl)</span>
+              <label>Sex</label>
+              <span>Sex</span>
             </div>
             
             
             <div class="input-container">
               <input type="text" class="input" name="n3" required/>
-              <label>Pression artérielle diastolique (mmHg)</label>
-              <span>Pression artérielle diastolique (mmHg)</span>
+              <label>Patient type</label>
+              <span>Patient type</span>
             </div>
             
             
             <div class="input-container">
               <input type="text" class="input" name="n4" required />
-              <label>Épaisseur du pli cutané (mm) </label>
-              <span>Épaisseur du pli cutané (mm)</span>
+              <label>Intubed</label>
+              <span>Intubed</span>
             </div>
             
             
             <div class="input-container">
               <input type="text" class="input" name="n5" required/>
-              <label>Insuline (mUI/ml)</label>
-              <span>Insuline (mUI/ml)</span>
+              <label>Pneumonia</label>
+              <span>Pneumonia<span>
             </div>
             
             
             <div class="input-container">
               <input type="text" class="input"  name="n6" required/>
-              <label>IMC</label>
-              <span>IMC</span>
+              <label>Age</label>
+              <span>Age</span>
             </div>
             
             
             <div class="input-container">
               <input type="text" class="input"  name="n7" required/>
-              <label>Fonction Pedigree Diabète</label>
-              <span>Fonction Pedigree Diabète</span>
+              <label>Diabetes</label>
+              <span>Diabetes</span>
             </div>
             
             
             <div class="input-container">
               <input type="text" class="input"  name="n8" required/>
-              <label>Age</label>
-              <span>Age</span>
+              <label>Hyper-tension</label>
+              <span>Hyper-tension</span>
             </div>
-            
+
+            <div class="input-container">
+              <input type="text" class="input"  name="n9" required/>
+              <label>Cardio vascular</label>
+              <span>Cardio vascular</span>
+            </div>
+
+            <div class="input-container">
+              <input type="text" class="input"  name="n10" required/>
+              <label>Renal chronic</label>
+              <span>Renal chronic</span>
+            </div>
 
             <input type="submit" value="Predire" class="btn" id="predict-btn" />
-            
             
           </form>
         </div>
@@ -190,22 +195,23 @@ inputs.forEach((input) => {
 });
 
 window.onload= ()=>{
-    result = "{{ result }}";
-    var val1="{{val1}}"
-    var val2="{{val2}}"
-    var val3="{{val3}}"
-    var val4="{{val4}}"
-    var val5="{{val5}}"
-    var val6="{{val6}}"
-    var val7="{{val7}}"
-    var val8="{{val8}}"
-    
-    
-    if (result === 'true') {
+
+    let result = "{{ result|default:'' }}";
+    let val1 = "{{ val1|default:'' }}";
+    let val2 = "{{ val2|default:'' }}";
+    let val3 = "{{ val3|default:'' }}";
+    let val4 = "{{ val4|default:'' }}";
+    let val5 = "{{ val5|default:'' }}";
+    let val6 = "{{ val6|default:'' }}";
+    let val7 = "{{ val7|default:'' }}";
+    let val8 = "{{ val8|default:'' }}";
+    let val9 = "{{ val9|default:'' }}";
+    let val10 = "{{ val10|default:'' }}";
+
+
+    if (result ==='true') {
+        console.log("result est string")
         var success = document.getElementById('popupcontainertest');
-        console.log('result true')
-        console.log('val8 :'+val8)
-        console.log('val6:'+val6)
            success.innerHTML = `
           
             <form class="contact-form positive" id='predict-form' style='position:fixed; top: 7%; left: 30%;'>
@@ -222,7 +228,6 @@ window.onload= ()=>{
               
               <div class="input-container">
                 <input type="text" class="input" name="n3" value="${val3}" readonly/>
-                
               </div>
               
               
@@ -234,25 +239,32 @@ window.onload= ()=>{
               
               <div class="input-container">
                 <input type="text" class="input" name="n5" value="${val5}" readonly/>
-              
               </div>
               
               
               <div class="input-container">
-                <input type="text"  class="input"  value="${val6}" readonly name="n6" />
-                
+                <input type="text"  class="input"  value="${val6}" readonly name="n6" />    
               </div>
               
               
               <div class="input-container">
                 <input type="text" class="input"  name="n7" value="${val7}" readonly/>
-                
               </div>
               
               
               <div class="input-container">
-                <input type="text" class="input"  value="${val8}" readonly>
+                <input type="text" class="input" name="n8" value="${val8}" readonly>
               </div>
+
+              <div class="input-container">
+                <input type="text" class="input"  name="n9" value="${val9}" readonly/>
+              </div>
+
+              <div class="input-container">
+                <input type="text" class="input"  name="n10" value="${val10}" readonly/>
+              </div>
+              
+
             </form>
        
         `; 
@@ -267,6 +279,7 @@ window.onload= ()=>{
       });
        
     } else if(result==='false') {
+      console.log(result)
       var success = document.getElementById('popupcontainertest');
         console.log('result false')
         console.log('val8 :'+val8)
@@ -317,6 +330,17 @@ window.onload= ()=>{
               <div class="input-container">
                 <input type="text" class="input"  value="${val8}" readonly>
               </div>
+
+
+               <div class="input-container">
+                <input type="text" class="input"  name="n7" value="${val9}" readonly/>
+              </div>
+
+              
+              <div class="input-container">
+                <input type="text" class="input"  name="n7" value="${val10}" readonly/>
+              </div>
+              
             </form>
         `; 
        success.classList.add('visible')
