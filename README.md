@@ -1,45 +1,49 @@
-# Predilab - Diabetes Prediction and Information Platform
+# COVID‑19 Cassandra App 🧬
 
-Predilab is an interactive web application designed to help users assess their risk of developing Type 2 diabetes with an accuracy of 89.5% . It includes features such as prediction based on clinical data, personalized recommendations, and informative articles.
+A Django‑based web app using a pre-trained ML model to predict COVID-19 risk based on uploaded data, with a Cassandra backend for storage.
 
-## Features
+## 🔍 Features
 
-- **Diabetes Prediction:** Enter your clinical data and get an estimate based on a machine learning algorithm.
-- **Personalized Advice:** A dedicated section for diet plans tailored to diabetic individuals.
-- **Specialist Contact:** An option to connect users with diabetologists.
-- **Educational Articles:** Access informative articles on diabetes management and prevention.
+- **Web interface**: Upload medical data to get COVID-19 risk predictions.
+- **ML model**: Uses a serialized (`covid_model.pkl`) model for inference generated via mode_generate.py.
+- **Cassandra**: Stores input & prediction results in a Cassandra database with the prediction date.
+- **Containerized**: `docker-compose.yml` orchestrates Cassandra container.
 
-## Screenshots
+## 📦 Repo Structure
 
-### Homepage
-![Homepage Screenshot](screenshots/hero.png)
+/
+├── covid/ Django app code
+│ ├── views.py Request handling & Cassandra write logic
+│ ├── settings.py Settings including Cassandra config
+│ ├── wsgi.py WSGI entrypoint
+│ └── ...
+├── data/
+│ └── covid_data.csv Sample dataset (ignored via .gitignore)
+├── static/ Static assets
+├── templates/
+│ └── predict.html Upload form & result page
+├── covid_model.pkl Serialized ML model (ignored via .gitignore)
+├── manage.py Django CLI
+├── model_generate.py Trains and serializes the ML model
+├── pipeline.py Data pre-processing pipeline
+├── docker-compose.yml App + Cassandra orchestration
+├── requirements.txt Python dependencies
+├── README.md Project overview (you’re here!)
+└── tests/ (optional) Unit & integration tests
 
-### Prediction Page
-![Prediction Screenshot](screenshots/predict.png)
+## 🚀 Setup
 
-### Positive Result Example
-![Positive Result Screenshot](screenshots/positive.png)
+### Prerequisites
 
-### Negative Result Example
-![Negative Result Screenshot](screenshots/negative.png)
+- Python 3.8+
+- Docker Compose
+- Scikit-learn , Numpy, Pandas, Joblib
+- Covid 19 dataset from here : 'https://www.kaggle.com/datasets/meirnizri/covid19-dataset'
+- cassandra-driver
 
-### Diet Plans
-![Diet Plans Screenshot](screenshots/diets.png)
+### Quick start (recommended)
 
-### Doctors Section
-![Doctors Section Screenshot](screenshots/doctors.png)
-
-### Login Page
-![Login Page Screenshot](screenshots/login.png)
-
-### Sign-Up Page
-![Sign-Up Page Screenshot](screenshots/signup.png)
-
-## Technologies Used
-
-- **Frontend:** HTML, CSS, JavaScript.  
-- **Backend:** Django.  
-- **Database:** SQLite for secure user data storage.  
-- **Machine Learning Model:** Random Forest Classifier for optimized results.  
-- **Authentication:** Secure user management with email verification.
-
+```bash
+git clone https://github.com/SakkoumHamza/covi19-cassandra.git
+cd covi19-cassandra
+docker-compose up
