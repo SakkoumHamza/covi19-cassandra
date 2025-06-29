@@ -2,6 +2,28 @@
 
 A Django‑based web app using a pre-trained ML model to predict COVID-19 risk based on uploaded data, with a Cassandra backend for storage.
 
+## 🖼️ Aperçu de l'application
+
+web form:
+
+<p align="center">
+  <img src="screenshots/form.png" width="700"/>
+</p>
+
+Negative covid19 prediction :
+
+<p align="center">
+  <img src="screenshots/negative.png" width="700"/>
+</p>
+
+Postive prediciton :
+
+<p align="center">
+  <img src="screenshots/postive.png" width="700"/>
+</p>
+
+
+
 ## 🔍 Features
 
 - **Web interface**: Upload medical data to get COVID-19 risk predictions.
@@ -35,11 +57,9 @@ A Django‑based web app using a pre-trained ML model to predict COVID-19 risk b
 
 ### Prerequisites
 
-- Python 3.8+
-- Docker Compose
-- Scikit-learn , Numpy, Pandas, Joblib
+- Python 3.12.2, Docker
+- Django 5.2, scikit-learn 1.5.1 , numpy 1.26.4, pandas 2.2.2, joblib 1.4.2, cassandra-driver 3.29.2
 - Covid 19 dataset from here : 'https://www.kaggle.com/datasets/meirnizri/covid19-dataset'
-- cassandra-driver
 
 ### Quick start (recommended)
 
@@ -47,3 +67,4 @@ A Django‑based web app using a pre-trained ML model to predict COVID-19 risk b
 git clone https://github.com/SakkoumHamza/covi19-cassandra.git
 cd covi19-cassandra
 docker-compose up
+python3 manage.py runserver
