@@ -32,7 +32,7 @@ Postive prediciton :
 - **Containerized**: `docker-compose.yml` orchestrates Cassandra container.
 
 ## 📦 Repo Structure
-
+```bash
 /
 ├── covid/ Django app code
 │ ├── views.py Request handling & Cassandra write logic
@@ -52,6 +52,7 @@ Postive prediciton :
 ├── requirements.txt Python dependencies
 ├── README.md Project overview (you’re here!)
 └── tests/ (optional) Unit & integration tests
+```
 
 ## 🚀 Setup
 
